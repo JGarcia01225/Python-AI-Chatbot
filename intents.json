@@ -1,0 +1,47 @@
+{"intnets": [
+    {"tag": "greetings",
+    "patterns": ["hello", "hi", "hey", "greetings", "salutations"],
+    "responses": ["Hello!", "Hi there!", "Hey!", "Greetings!", "Salutations!"]
+    },
+    {"tag": "goodbye",
+       "patterns": ["goodbye", "bye", "see you later", "farewell"],
+       "responses": ["Goodbye!", "See you later!", "Farewell!"]
+    },
+    {"tag": "thanks",
+       "patterns": ["thanks", "thank you", "appreciate it"],
+       "responses": ["You're welcome!", "No problem!", "Glad to help!"]
+    },
+    {"tag": "age",
+       "patterns": ["how old are you?", "what is your age?", "age"],
+       "responses": ["I'm just a computer program, so I don't have an age!", "I was created recently, so I'm quite young!"]
+    },
+    {"tag": "name",
+       "patterns": ["what is your name?", "who are you?", "name"],
+       "responses": ["I'm a computer program created to assist you!", "You can call me Assistant!"]
+    },
+    {"tag": "help",
+       "patterns": ["help", "can you help me?", "I need assistance"],
+       "responses": ["Of course! What do you need help with?", "I'm here to assist you!"]
+    },
+    {"tag": "jokes",
+       "patterns": ["tell me a joke", "make me laugh", "joke"],
+       "responses": ["Why did the scarecrow win an award? Because he was outstanding in his field!", "I told my computer I needed a break, and now it won't stop sending me Kit-Kat ads!"]
+    },
+    {"tag": "weather",
+       "patterns": ["what's the weather like?", "weather", "is it going to rain?"],
+       "responses": ["I'm not sure, but you can check a weather website!", "I can't provide real-time weather updates."]
+    },
+    {"tag": "news",
+       "patterns": ["what's the news?", "news", "any updates?"],
+       "responses": ["I can't provide real-time news updates.", "You can check a news website for the latest updates."]
+    },
+    {"tag": "shopping",
+       "patterns": ["shop", "buy", "purchase"],
+       "responses": ["You can shop online or visit a local store!", "What are you looking to buy?"]
+    },
+    {"tag": "hours",
+       "patterns": ["what are your hours?", "when are you open?", "hours of operation"],
+       "responses": ["I'm available 24/7!", "You can reach me anytime!"]
+    }
+
+]}
