@@ -19,13 +19,14 @@ model = tf.keras.models.load_model('chatbot_model.h5')
 def clean_up_sentence(sentence):
     sentence_words = nltk.word_tokenize(sentence)
     sentence_words = [lemmatizer.lemmatize(word) for word in sentence_words]
+    return sentence_words
 
 def bag_of_words(sentence):
     sentence_words = clean_up_sentence(sentence)
     bag = [0]*len(words)
     for w in sentence_words:
-        for i, w in enumerate(words):
-            if w == w:
+        for i, word in enumerate(words):
+            if word == w:
                 bag[i] = 1
     return np.array(bag)
 
@@ -40,3 +41,18 @@ def predict_class(sentence):
     for r in results:
         return_list.append({"intent": classes[r[0]], "probability": str(r[1])})
     return return_list
+
+def get_response(intents_list, intents_json):
+    intent = intents_list[0]['intent']
+    list_of_intents = intents_json['intents']
+    for i in list_of_intents:
+        if i['tag'] == intent:
+            results = random.choice(i['responses'])
+            break
+    return results
+
+while True:
+    message = input("")
+    ints = predict_class(message)
+    res = get_response(ints, intents)
+    print(res)
