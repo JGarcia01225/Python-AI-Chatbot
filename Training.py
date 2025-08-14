@@ -2,13 +2,16 @@ import random
 import json
 import pickle
 import numpy as np
+import tensorflow as tf
 
 import nltk
 from nltk.stem import WordNetLemmatizer
+# nltk.download('punkt_tab')
+# nltk.download('wordnet')
 
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Activation, Dropout
-from tensorflow.keras.optimizers import SGD
+# from tensorflow.keras.models import Sequential
+# from tensorflow.keras.layers import Dense, Activation, Dropout
+# from tensorflow.keras.optimizers import SGD
 
 lemmatizer = WordNetLemmatizer()
 intents = json.loads(open('intents.json').read())
@@ -18,11 +21,19 @@ classes = []
 documents = []
 ignore_letters = ['?', '!', '.', ',']
 
-for intent in ['intents']:
+for intent in intents['intents']:
     for pattern in intent['patterns']:
         word_list = nltk.word_tokenize(pattern)
-        words.append(word_list)
+        words.extend(word_list)
         documents.append((word_list, intent['tag']))
+        if intent['tag'] not in classes:
+            classes.append(intent['tag'])
+
+for intent in intents['intents']:
+    for pattern in intent['patterns']:
+        wordList = nltk.word_tokenize(pattern)
+        words.extend(wordList)
+        documents.append((wordList, intent['tag']))
         if intent['tag'] not in classes:
             classes.append(intent['tag'])
 
@@ -35,34 +46,36 @@ pickle.dump(words, open('words.pkl', 'wb'))
 pickle.dump(classes, open('classes.pkl', 'wb'))
 
 training = []
-output_empty = [0] * len(classes)
+outputEmpty = [0] * len(classes)
 
-for doc in documents:
+for document in documents:
     bag = []
-    word_list = doc[0]
-    word_list = [lemmatizer.lemmatize(word.lower()) for word in word_patterns]
+    wordPatterns = document[0]
+    wordPatterns = [lemmatizer.lemmatize(word.lower()) for word in wordPatterns]
     for word in words:
-        bag.append(1) if w in word_list else bag.append(0)
-    output_row = list(output_empty)
-    output_row[classes.index(doc[1])] = 1
-    training.append([bag, output_row])
+        bag.append(1) if word in wordPatterns else bag.append(0)
+
+    outputRow = list(outputEmpty)
+    outputRow[classes.index(document[1])] = 1
+    training.append(bag + outputRow)
 
 random.shuffle(training)
 training = np.array(training)
 
-X_train = list(training[:, 0])
-y_train = list(training[:, 1])
+trainX = training[:, :len(words)]
+trainY = training[:, len(words):]
 
-model = Sequential()
-model.add(Dense(128, input_shape=(len(X_train[0]),), activation='relu'))
-model.add(Dropout(0.5))
-model.add(Dense(64, activation='relu'))
-model.add(Dropout(0.5))
-model.add(Dense(len(y_train[0]), activation='softmax'))
+model = tf.keras.Sequential()
+model.add(tf.keras.layers.Dense(128, input_shape=(len(trainX[0]),), activation = 'relu'))
+model.add(tf.keras.layers.Dropout(0.5))
+model.add(tf.keras.layers.Dense(64, activation = 'relu'))
+model.add(tf.keras.layers.Dropout(0.5))
+model.add(tf.keras.layers.Dense(len(trainY[0]), activation='softmax'))
 
-sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+sgd = tf.keras.optimizers.SGD(learning_rate=0.01, momentum=0.9, nesterov=True)
 model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
 
-hist = model.fit(np.array(X_train), np.array(y_train), epochs=200, batch_size=5, verbose=1)
-model.save('chatbot_model.h5', hist)
-print("Done")
+model.fit(trainX, trainY, epochs=200, batch_size=5, verbose=1)
+model.save('chatbot_model.h5')
+print('Done')
+
