@@ -42,6 +42,11 @@
     {"tag": "hours",
        "patterns": ["what are your hours?", "when are you open?", "hours of operation"],
        "responses": ["I'm available 24/7!", "You can reach me anytime!", "Just call and I'm there"]
+    },
+        {"tag": "location",
+       "patterns": ["where are you located?", "location", "where can I find you?"],
+       "responses": ["I'm a virtual assistant, so I'm everywhere and nowhere!", "You can access me online from anywhere!", "I'm not tied to a physical location."]
     }
+
 
 ]}
